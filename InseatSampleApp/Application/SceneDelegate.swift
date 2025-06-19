@@ -25,7 +25,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func setupInseat() {
-        let configuration = Configuration(apiKey: "{INSEAT_API_KEY}")
+        let configuration = Configuration(
+            apiKey: "{INSEAT_API_KEY}",
+            icaos: ["{ICAO_CODE}"],
+            environment: .test
+        )
         try! InseatAPI.shared.initialize(configuration: configuration)
 
         try! InseatAPI.shared.start()
@@ -35,4 +39,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 }
-
