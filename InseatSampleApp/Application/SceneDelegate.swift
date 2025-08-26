@@ -26,16 +26,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private func setupInseat() {
         let configuration = Configuration(
-            apiKey: "{INSEAT_API_KEY}",
-            icaos: ["{ICAO_CODE}"],
-            environment: .test
+            apiKey: "{API_KEY}",
+            supportedICAOs: ["{ICAO_UPPERCASED}"],
+            environment: Configuration.Environment.test
         )
-        try! InseatAPI.shared.initialize(configuration: configuration)
 
-        try! InseatAPI.shared.start()
+        Task {
+            do {
+                try await InseatAPI.shared.initialize(configuration: configuration)
+                try await InseatAPI.shared.start()
 
-        InseatAPI.shared.syncProductData { result in
-            print("[DEBUG]: did sync data with result='\(result)'")
+                InseatAPI.shared.syncProductData { result in
+                    print("[DEBUG]: did sync data with result='\(result)'")
+                }
+            } catch {
+                print("[DEBUG]: Inseat API failed with an error: '\(error)'")
+            }
         }
     }
 }
