@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A27C6E92DDB538B00F4F364 /* Inseat in Frameworks */ = {isa = PBXBuildFile; productRef = 3A27C6E82DDB538B00F4F364 /* Inseat */; };
 		3A7D3BF02DD4C894008EB45C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3A7D3BEF2DD4C894008EB45C /* PrivacyInfo.xcprivacy */; };
+		FB5050F82E7AEBB900200998 /* Inseat in Frameworks */ = {isa = PBXBuildFile; productRef = FB5050F72E7AEBB900200998 /* Inseat */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A27C6E92DDB538B00F4F364 /* Inseat in Frameworks */,
+				FB5050F82E7AEBB900200998 /* Inseat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,7 +141,7 @@
 			);
 			name = InseatSampleApp;
 			packageProductDependencies = (
-				3A27C6E82DDB538B00F4F364 /* Inseat */,
+				FB5050F72E7AEBB900200998 /* Inseat */,
 			);
 			productName = InseatSampleApp;
 			productReference = 3AAF558A2DBB7EEE00A08ED3 /* InseatSampleApp.app */;
@@ -226,7 +226,7 @@
 			mainGroup = 3AAF55812DBB7EEE00A08ED3;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				3A27C6E72DDB538B00F4F364 /* XCRemoteSwiftPackageReference "inseat-sdk-ios" */,
+				FB5050F62E7AEBB900200998 /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3AAF558B2DBB7EEE00A08ED3 /* Products */;
@@ -310,8 +310,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 16;
+				DEVELOPMENT_TEAM = ERJWNH5CC4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InseatSampleApp/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Uses Bluetooth to connect and sync with nearby devices";
@@ -347,7 +347,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 16;
+				DEVELOPMENT_TEAM = ERJWNH5CC4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InseatSampleApp/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Uses Bluetooth to connect and sync with nearby devices";
@@ -365,6 +366,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.immflyretail.inseat.sampleapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = InseatTestApp;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -608,20 +610,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3A27C6E72DDB538B00F4F364 /* XCRemoteSwiftPackageReference "inseat-sdk-ios" */ = {
+		FB5050F62E7AEBB900200998 /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ImmflyRetail/inseat-sdk-ios";
+			repositoryURL = "https://github.com/ImmflyRetail/inseat-sdk-ios-uat";
 			requirement = {
 				kind = exactVersion;
-				version = 0.1.7;
+				version = 0.1.15;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3A27C6E82DDB538B00F4F364 /* Inseat */ = {
+		FB5050F72E7AEBB900200998 /* Inseat */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3A27C6E72DDB538B00F4F364 /* XCRemoteSwiftPackageReference "inseat-sdk-ios" */;
+			package = FB5050F62E7AEBB900200998 /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */;
 			productName = Inseat;
 		};
 /* End XCSwiftPackageProductDependency section */

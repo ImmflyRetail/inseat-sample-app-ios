@@ -5,6 +5,7 @@ protocol MenuViewModelInput: ObservableObject {
     var menus: [MenuItem] { get }
 
     func onAppear()
+    func fetchMenus() async
     func select(menu: MenuItem)
 }
 
@@ -16,6 +17,13 @@ final class MenuViewModel: MenuViewModelInput {
 
     func onAppear() {
         Task {
+            try await Task.sleep(nanoseconds: 2_000_000_000)    // Sleep for 2 seconds
+            await fetchMenus()
+        }
+    }
+
+    func fetchMenus() async {
+        do {
             let menus = try await InseatAPI.shared.fetchMenus()
             await MainActor.run {
                 self.inseatMenus = menus
@@ -23,6 +31,8 @@ final class MenuViewModel: MenuViewModelInput {
                     MenuItem(id: $0.key, name: $0.displayName.first!.text)
                 }
             }
+        } catch {
+            print("[DEBUG] error while fetching menus")
         }
     }
 

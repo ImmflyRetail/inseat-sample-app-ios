@@ -20,9 +20,15 @@ struct CheckoutView<ViewModel: CheckoutViewModelInput>: View {
                                 }
                             }
 
+                            if let saving = viewModel.totalSaving {
+                                Divider()
+
+                                TotalView(title: "Saving", price: saving)
+                            }
+
                             Divider()
 
-                            TotalPriceView(totalPrice: viewModel.totalPrice)
+                            TotalView(title: "Total", price: viewModel.totalPrice)
                                 .padding(.bottom, 8)
                         }
                     }
@@ -76,18 +82,19 @@ struct CheckoutView<ViewModel: CheckoutViewModelInput>: View {
         }
     }
 
-    private struct TotalPriceView: View {
+    private struct TotalView: View {
 
-        let totalPrice: Price
+        let title: String
+        let price: Price
 
         var body: some View {
             HStack {
-                Text("Total")
+                Text(title)
                     .font(.system(size: 18, weight: .semibold))
 
                 Spacer()
 
-                Text("\(totalPrice.formatted())")
+                Text("\(price.formatted())")
                     .font(.system(size: 18, weight: .semibold))
             }
         }
@@ -107,6 +114,7 @@ private final class CheckoutViewModelMock: CheckoutViewModelInput {
         CheckoutProductItem(id: 1, name: "Fanta", quantity: 2, unitPrice: .init(amount: 2, currencyCode: "EUR"))
     ]
 
+    let totalSaving: Price? = nil
     let totalPrice: Price = .init(amount: 6, currencyCode: "EUR")
 
     @Published var seatNumber: String = ""

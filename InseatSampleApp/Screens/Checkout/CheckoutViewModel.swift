@@ -4,6 +4,7 @@ import Inseat
 
 protocol CheckoutViewModelInput: ObservableObject {
     var cartItems: [CheckoutProductItem] { get }
+    var totalSaving: Price? { get }
     var totalPrice: Price { get }
 
     var seatNumber: String { get set }
@@ -14,37 +15,47 @@ protocol CheckoutViewModelInput: ObservableObject {
 
 final class CheckoutViewModel: CheckoutViewModelInput {
 
-    let cartItems: [CheckoutProductItem]
+    var cartItems: [CheckoutProductItem] {
+        cart.items
+    }
 
-    let totalPrice: Price
+    var totalSaving: Price? {
+        let amount = cart
+            .appliedPromotions
+            .compactMap { $0.totalSaving?.amount }
+            .reduce(into: Decimal.zero) { $0 += $1 }
+
+        if amount > .zero {
+            return Price(amount: amount, currencyCode: totalPrice.currencyCode)
+        }
+        return nil
+    }
+
+    var totalPrice: Price {
+        cart.totalPrice
+    }
 
     @Published var seatNumber: String = ""
+
+    private let cart: Cart
 
     private let router: CartRouter
 
     private let cartManager: CartManaging
 
     init(
+        cart: Cart,
         router: CartRouter,
-        cartItems: [CheckoutProductItem],
-        cartManager: CartManaging = CartManager.shared,
-        cartCalculator: CartCalculating = CartCalculator()
+        cartManager: CartManaging = CartManager.shared
     ) {
+        self.cart = cart
         self.router = router
-        self.cartItems = cartItems
-        self.totalPrice = cartCalculator.totalPrice(for: cartItems)
         self.cartManager = cartManager
     }
 
     func onAppear() { }
 
     func makeOrder() {
-        let cart = Cart(
-            items: cartItems,
-            totalPrice: totalPrice,
-            seatNumber: seatNumber
-        )
-
         Task {
             guard let shiftId = try await InseatAPI.shared.fetchShop()?.shiftId else {
                 return
@@ -52,7 +63,7 @@ final class CheckoutViewModel: CheckoutViewModelInput {
             let order = Inseat.Order(
                 id: UUID().uuidString,
                 shiftId: shiftId,
-                seatNumber: cart.seatNumber,
+                seatNumber: seatNumber,
                 status: .placed,
                 items: cart.items.map {
                     Inseat.Order.Item(
@@ -62,6 +73,7 @@ final class CheckoutViewModel: CheckoutViewModelInput {
                         price: Inseat.Order.Price(amount: $0.unitPrice.amount)
                     )
                 },
+                appliedPromotions: cart.appliedPromotions,
                 orderCurrency: cart.totalPrice.currencyCode,
                 totalPrice: .init(amount: cart.totalPrice.amount),
                 createdAt: Date(),

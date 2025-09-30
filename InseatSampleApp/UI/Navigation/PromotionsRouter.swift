@@ -1,9 +1,9 @@
 import SwiftUI
 
-final class CartRouter: ObservableObject {
+final class PromotionsRouter: ObservableObject {
 
     enum Destination: Codable, Hashable {
-        case checkout
+        case promotionBuilder
     }
 
     @Published var navPath = NavigationPath()

@@ -134,25 +134,21 @@ final class ShopViewModel: ShopViewModelInput {
     }
 
     private func handleProducts(_ products: [Inseat.Product]) {
-        let date = Date()
+        let now = Date()
         let products = products
             .sorted(by: { $0.name < $1.name })
-            .filter {
-                guard let start = $0.startDate, let end = $0.endDate else {
-                    return true
-                }
-                return (start...end).contains(date)
-            }
+            .filter { ($0.startDate...$0.endDate).contains(now) }
 
         cartManager.setAvailableProducts(products: products.map {
             Product(
                 id: $0.id,
+                masterId: $0.masterId,
                 image: $0.image,
                 name: $0.name,
                 availableQuantity: $0.quantity,
                 price: .init(
-                    amount: $0.prices.first { $0.currencyCode == "EUR" }?.amount ?? .zero,
-                    currencyCode: $0.prices.first { $0.currencyCode == "EUR" }?.currencyCode ?? ""
+                    amount: $0.prices.first { $0.currency == "EUR" }?.amount ?? .zero,
+                    currencyCode: $0.prices.first { $0.currency == "EUR" }?.currency ?? ""
                 )
             )
         })
@@ -165,8 +161,8 @@ final class ShopViewModel: ShopViewModelInput {
                 name: $0.name,
                 availableQuantity: $0.quantity,
                 price: .init(
-                    amount: $0.prices.first { $0.currencyCode == "EUR" }?.amount ?? .zero,
-                    currencyCode: $0.prices.first { $0.currencyCode == "EUR" }?.currencyCode ?? ""
+                    amount: $0.prices.first { $0.currency == "EUR" }?.amount ?? .zero,
+                    currencyCode: $0.prices.first { $0.currency == "EUR" }?.currency ?? ""
                 )
             )
         }

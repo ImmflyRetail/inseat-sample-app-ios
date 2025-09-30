@@ -9,6 +9,11 @@ struct MainView: View {
                     TabViewItem(title: "Shop", imageName: "Shop")
                 }
 
+            PromotionListView(viewModel: PromotionListViewModel())
+                .tabItem {
+                    TabViewItem(title: "Promotions", imageName: "Shop")
+                }
+
             CartView(viewModel: CartViewModel())
                 .tabItem {
                     TabViewItem(title: "Cart", imageName: "Cart")

@@ -4,6 +4,7 @@ struct Product {
     typealias ID = Int
     
     let id: Int
+    let masterId: Int
     let image: UIImage?
     let name: String
     let availableQuantity: Int

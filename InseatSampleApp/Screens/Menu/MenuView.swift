@@ -37,6 +37,9 @@ struct MenuView<ViewModel: MenuViewModelInput>: View {
                 .padding(.vertical, 24)
                 .padding(.horizontal, 16)
             }
+            .refreshable {
+                await viewModel.fetchMenus()
+            }
             .background(Color.backgroundGray)
             .onAppear(perform: viewModel.onAppear)
             .navigationDestination(for: ShopRouter.Destination.self) { destination in
@@ -59,6 +62,10 @@ private final class MenuViewModelMock: MenuViewModelInput {
     init() {}
 
     func onAppear() { }
+
+    func fetchMenus() async {
+        
+    }
 
     func select(menu: MenuItem) { }
 }

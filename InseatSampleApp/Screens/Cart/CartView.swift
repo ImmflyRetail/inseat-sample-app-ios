@@ -46,6 +46,43 @@ struct CartView<ViewModel: CartViewModelInput>: View {
                             Divider()
 
                             HStack {
+                                Text("Subtotal")
+                                    .font(.system(size: 18, weight: .semibold))
+
+                                Spacer()
+
+                                Text("\(viewModel.subtotalPrice.formatted())")
+                                    .font(.system(size: 18, weight: .semibold))
+                            }
+                            .frame(height: 44)
+
+                            if let totalSaving = viewModel.totalSaving {
+                                HStack {
+                                    Text("Total Savings")
+                                        .font(.system(size: 18, weight: .semibold))
+
+                                    Spacer()
+
+                                    Text("\(totalSaving.formatted())")
+                                        .font(.system(size: 18, weight: .semibold))
+                                }
+                                .frame(height: 44)
+
+                                ForEach(viewModel.appliedPromotions, id: \.id) { promotion in
+                                    HStack {
+                                        Text(promotion.name)
+                                            .font(.system(size: 18, weight: .regular))
+
+                                        Spacer()
+
+                                        Text("\(promotion.saving?.formatted() ?? "N/A")")
+                                            .font(.system(size: 18, weight: .semibold))
+                                    }
+                                    .frame(height: 44)
+                                }
+                            }
+
+                            HStack {
                                 Text("Total")
                                     .font(.system(size: 18, weight: .semibold))
 
@@ -60,7 +97,7 @@ struct CartView<ViewModel: CartViewModelInput>: View {
                         .listRowInsets(EdgeInsets(top: 24, leading: 16, bottom: 24, trailing: 16))
 
                         Button("Checkout") {
-                            router.navigate(to: .checkout(items: viewModel.checkout()))
+                            router.navigate(to: .checkout)
                         }
                         .buttonStyle(BrandButtonStyle())
                         .disabled(!viewModel.isOrdersEnabled)
@@ -74,11 +111,11 @@ struct CartView<ViewModel: CartViewModelInput>: View {
             .onAppear(perform: viewModel.onAppear)
             .navigationDestination(for: CartRouter.Destination.self) { destination in
                 switch destination {
-                case .checkout(let items):
+                case .checkout:
                     return CheckoutView(
                         viewModel: CheckoutViewModel(
-                            router: router,
-                            cartItems: items
+                            cart: viewModel.currentCart,
+                            router: router
                         )
                     )
                 }
@@ -133,24 +170,41 @@ private struct ProductItemView: View {
 }
 
 private final class CartViewModelMock: CartViewModelInput {
+    
     var shopStatus: String = "OPEN"
 
     var products: [CartProductItem] = [
-        CartProductItem(id: 1, image: nil, name: "Pepsi", availableQuantity: 10, price: .init(amount: 3, currencyCode: "EUR")),
-        CartProductItem(id: 2, image: nil, name: "Sandwich", availableQuantity: 10, price: .init(amount: 3, currencyCode: "EUR")),
-        CartProductItem(id: 3, image: nil, name: "Sprite", availableQuantity: 10, price: .init(amount: 3, currencyCode: "EUR")),
-        CartProductItem(id: 4, image: nil, name: "Fanta", availableQuantity: 10, price: .init(amount: 3, currencyCode: "EUR"))
+        CartProductItem(id: 1, masterId: 11, image: nil, name: "Pepsi", availableQuantity: 10, price: .init(amount: 3, currencyCode: "EUR")),
+        CartProductItem(id: 2, masterId: 22, image: nil, name: "Sandwich", availableQuantity: 10, price: .init(amount: 3, currencyCode: "EUR")),
+        CartProductItem(id: 3, masterId: 33, image: nil, name: "Sprite", availableQuantity: 10, price: .init(amount: 3, currencyCode: "EUR")),
+        CartProductItem(id: 4, masterId: 44, image: nil, name: "Fanta", availableQuantity: 10, price: .init(amount: 3, currencyCode: "EUR"))
     ]
 
     var selectedProducts: [CartProductItem.ID: Int] = [:]
 
+    var appliedPromotions: [CartAppliedPromotion] = []
+
+    var totalSaving: Price?
+
+    var subtotalPrice: Price = Price(amount: .zero, currencyCode: "EUR")
+    
     var totalPrice: Price = Price(amount: .zero, currencyCode: "EUR")
+
+    var currentCart: Cart {
+        let cartItems: [CheckoutProductItem] = products
+            .compactMap {
+                guard let quantity = selectedProducts[$0.id] else {
+                    return nil
+                }
+                return CheckoutProductItem(id: $0.id, name: $0.name, quantity: quantity, unitPrice: $0.price)
+            }
+
+        return Cart(items: cartItems, appliedPromotions: [], totalPrice: totalPrice)
+    }
 
     var isOrdersEnabled = true
 
     func onAppear() { }
-
-    func checkout() -> [CheckoutProductItem] { [] }
 
     init() {  }
 }
