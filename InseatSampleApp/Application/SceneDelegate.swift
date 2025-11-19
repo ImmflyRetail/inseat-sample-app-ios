@@ -18,7 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func setupUI(window: UIWindow) {
-        window.rootViewController = UIHostingController(rootView: MainView())
+        window.rootViewController = UIHostingController(
+            rootView: MenuView(viewModel: MenuViewModel())
+                .environmentObject(ShopRouter())
+        )
         self.window = window
 
         window.makeKeyAndVisible()
@@ -33,14 +36,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         Task {
             do {
+                InseatAPI.shared.setLoggingDestinations([
+                    InseatLoggingDestination()
+                ])
                 try await InseatAPI.shared.initialize(configuration: configuration)
                 try await InseatAPI.shared.start()
 
                 InseatAPI.shared.syncProductData { result in
-                    print("[DEBUG]: did sync data with result='\(result)'")
+                    Logger.log("did sync data with result='\(result)'", level: .debug)
                 }
             } catch {
-                print("[DEBUG]: Inseat API failed with an error: '\(error)'")
+                Logger.log("Inseat API failed with an error: '\(error)'", level: .error)
             }
         }
     }

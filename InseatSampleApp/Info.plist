@@ -25,6 +25,12 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Rubik-Bold.ttf</string>
+		<string>Rubik-Regular.ttf</string>
+		<string>Rubik-SemiBold.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

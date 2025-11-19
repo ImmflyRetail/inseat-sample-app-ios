@@ -6,9 +6,9 @@ struct InfoView: View {
     var body: some View {
         Text(text)
             .foregroundStyle(Color.infoText)
-            .font(.system(size: 16, weight: .regular))
+            .font(Font.appFont(size: 16, weight: .regular))
             .padding(16)
-            .background(Color.infoBackground)
+            .background(Color.backgroundInfo)
             .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }

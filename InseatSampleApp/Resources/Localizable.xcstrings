@@ -1,0 +1,947 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+      "shouldTranslate" : false
+    },
+    "product.multiplier" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%ldx"
+          }
+        }
+      }
+    },
+    "promotion.discount_type.amount" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ OFF"
+          }
+        }
+      }
+    },
+    "promotion.discount_type.percentage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% OFF"
+          }
+        }
+      }
+    },
+    "promotion.discount_type.voucher" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get a voucher"
+          }
+        }
+      }
+    },
+    "screen.cart.buttons.checkout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checkout"
+          }
+        }
+      }
+    },
+    "screen.cart.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your cart is empty"
+          }
+        }
+      }
+    },
+    "screen.cart.summary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "screen.cart.summary.savings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Promotion"
+          }
+        }
+      }
+    },
+    "screen.cart.summary.subtotal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subtotal"
+          }
+        }
+      }
+    },
+    "screen.cart.summary.total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        }
+      }
+    },
+    "screen.cart.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shopping cart"
+          }
+        }
+      }
+    },
+    "screen.checkout.actions.collapse" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide order details"
+          }
+        }
+      }
+    },
+    "screen.checkout.actions.expand" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View order details"
+          }
+        }
+      }
+    },
+    "screen.checkout.actions.order" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order now"
+          }
+        }
+      }
+    },
+    "screen.checkout.info" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You’ll pay your order to a crew member when they deliver it to you."
+          }
+        }
+      }
+    },
+    "screen.checkout.input" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your details"
+          }
+        }
+      }
+    },
+    "screen.checkout.input.seat.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i.e. 4B"
+          }
+        }
+      }
+    },
+    "screen.checkout.input.seat.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What's your seat number?"
+          }
+        }
+      }
+    },
+    "screen.checkout.items" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1ld item for"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1ld items for"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "screen.checkout.summary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "screen.checkout.summary.savings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Promotion"
+          }
+        }
+      }
+    },
+    "screen.checkout.summary.subtotal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subtotal"
+          }
+        }
+      }
+    },
+    "screen.checkout.summary.total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        }
+      }
+    },
+    "screen.checkout.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checkout"
+          }
+        }
+      }
+    },
+    "screen.menu.select" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose which menu you want to view based on your preferences."
+          }
+        }
+      }
+    },
+    "screen.menu.subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu selection"
+          }
+        }
+      }
+    },
+    "screen.menu.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inseat"
+          }
+        }
+      }
+    },
+    "screen.order_status.cancellation.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel order"
+          }
+        }
+      }
+    },
+    "screen.order_status.cancellation.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order prep hasn’t begun. You can still cancel your order."
+          }
+        }
+      }
+    },
+    "screen.order_status.expected_delivery" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delivery expected in 10 minutes."
+          }
+        }
+      }
+    },
+    "screen.order_status.stage.cancelled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelled"
+          }
+        }
+      }
+    },
+    "screen.order_status.stage.delivered" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delivered"
+          }
+        }
+      }
+    },
+    "screen.order_status.stage.placed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placed"
+          }
+        }
+      }
+    },
+    "screen.order_status.stage.preparing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In preparation"
+          }
+        }
+      }
+    },
+    "screen.order_status.stage.refunded" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refunded"
+          }
+        }
+      }
+    },
+    "screen.order_status.subtitle.cancelled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order cancelled"
+          }
+        }
+      }
+    },
+    "screen.order_status.subtitle.delivered" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order delivered. Enjoy!"
+          }
+        }
+      }
+    },
+    "screen.order_status.subtitle.placed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your order’s in!"
+          }
+        }
+      }
+    },
+    "screen.order_status.subtitle.preparing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Getting your items ready"
+          }
+        }
+      }
+    },
+    "screen.order_status.subtitle.refunded" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order refunded"
+          }
+        }
+      }
+    },
+    "screen.order_status.summary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "screen.order_status.summary.details" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details"
+          }
+        }
+      }
+    },
+    "screen.order_status.summary.details.order_id" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order ID"
+          }
+        }
+      }
+    },
+    "screen.order_status.summary.details.seat_number" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sear number"
+          }
+        }
+      }
+    },
+    "screen.order_status.summary.savings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Savings"
+          }
+        }
+      }
+    },
+    "screen.order_status.summary.subtotal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subtotal"
+          }
+        }
+      }
+    },
+    "screen.order_status.summary.total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        }
+      }
+    },
+    "screen.order_status.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order status"
+          }
+        }
+      }
+    },
+    "screen.orders.actions.collapse" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide order details"
+          }
+        }
+      }
+    },
+    "screen.orders.actions.expand" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View order details"
+          }
+        }
+      }
+    },
+    "screen.orders.actions.status" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View order status"
+          }
+        }
+      }
+    },
+    "screen.orders.order_status.cancelled_by_crew" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rejected"
+          }
+        }
+      }
+    },
+    "screen.orders.order_status.cancelled_by_passenger" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelled"
+          }
+        }
+      }
+    },
+    "screen.orders.order_status.delivered" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delivered"
+          }
+        }
+      }
+    },
+    "screen.orders.order_status.placed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order placed"
+          }
+        }
+      }
+    },
+    "screen.orders.order_status.preparing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In preparation"
+          }
+        }
+      }
+    },
+    "screen.orders.order_status.received" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order received"
+          }
+        }
+      }
+    },
+    "screen.orders.order_status.refunded" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refunded"
+          }
+        }
+      }
+    },
+    "screen.orders.summary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "screen.orders.summary.compact" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "%1ld item for"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1ld items for"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "screen.orders.summary.details" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details"
+          }
+        }
+      }
+    },
+    "screen.orders.summary.details.order_id" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order ID"
+          }
+        }
+      }
+    },
+    "screen.orders.summary.details.seat_number" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seat number"
+          }
+        }
+      }
+    },
+    "screen.orders.summary.savings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Promotion"
+          }
+        }
+      }
+    },
+    "screen.orders.summary.subtotal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subtotal"
+          }
+        }
+      }
+    },
+    "screen.orders.summary.total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        }
+      }
+    },
+    "screen.orders.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My orders"
+          }
+        }
+      }
+    },
+    "screen.promotion_builder.actions.add_to_cart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to cart"
+          }
+        }
+      }
+    },
+    "screen.promotion_builder.benetif_unlocked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benefits unlocked!"
+          }
+        }
+      }
+    },
+    "screen.promotion_builder.left_to_unlock_benefit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "away to unlock benefits"
+          }
+        }
+      }
+    },
+    "screen.promotion_builder.required_n_items" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%ld required"
+          }
+        }
+      }
+    },
+    "screen.promotion_builder.satisfied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "✓ required"
+          }
+        }
+      }
+    },
+    "screen.promotion_builder.select_n_items" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "Select %ld item"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Select %ld items"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "screen.promotion_builder.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Promotion builder"
+          }
+        }
+      }
+    },
+    "screen.promotions.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclusive promotions"
+          }
+        }
+      }
+    },
+    "screen.settings.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "screen.shop.my_orders" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My orders (%ld)"
+          }
+        }
+      }
+    },
+    "screen.shop.shop_status" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shop Status: %@"
+          }
+        }
+      }
+    },
+    "screen.shop.stock_left" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock: %ld"
+          }
+        }
+      }
+    },
+    "screen.shop.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shop"
+          }
+        }
+      }
+    },
+    "screen.shop.unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The store is not open yet! Feel free to explore the available products, but keep in mind that prices and stock may change when the store officially opens."
+          }
+        }
+      }
+    },
+    "settings.config.automatic_refresh" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic data refresh"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
