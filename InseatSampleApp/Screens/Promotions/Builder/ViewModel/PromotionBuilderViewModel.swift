@@ -292,7 +292,7 @@ final class PromotionBuilderViewModel: PromotionBuilderViewModelInput {
             })
 
             await MainActor.run {
-                coordinator.navigateToRoot()
+                coordinator.navigateToShop()
             }
         }
     }

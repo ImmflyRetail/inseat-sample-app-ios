@@ -53,6 +53,8 @@ struct PromotionListItemView: View {
                     Spacer(minLength: 8)
 
                     Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                         .frame(width: 122, height: 114)
                 }
             }
