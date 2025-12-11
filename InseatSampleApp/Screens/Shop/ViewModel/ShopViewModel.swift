@@ -6,33 +6,13 @@ final class ShopViewModel: ShopViewModelInput {
 
     @Published var shopStatus: ShopContract.ShopStatus = .closed
 
-    @Published var products: [ShopContract.Product] = []
-
     @Published var selectedProducts: [ShopContract.Product.ID: Int] = [:] {
         didSet {
-            var cartItems = [Cart.Item]()
-            for (productId, quantity) in selectedProducts {
-                guard let product = stockManager.product(id: productId) else {
-                    continue
-                }
-                let cartItem = Cart.Item(
-                    id: productId,
-                    masterId: product.masterId,
-                    name: product.name,
-                    quantity: quantity,
-                    unitPrice: product.price.amount
-                )
-                cartItems.append(cartItem)
-            }
-            Task {
-                await cartManager.updateCart(items: cartItems)
-            }
+            updateSelection()
         }
     }
 
     @Published var categories: [Category] = []
-
-    @Published var selectedCategory: Category?
 
     @Published var ordersCount: Int = 0
 
@@ -64,20 +44,6 @@ final class ShopViewModel: ShopViewModelInput {
     }
 
     private func bind() {
-        $selectedCategory
-            .sink { [weak self] category in
-                guard let self = self else {
-                    return
-                }
-                self.products = self.allProducts.filter {
-                    if let id = category?.id {
-                        return $0.categoryId == id
-                    }
-                    return true
-                }
-            }
-            .store(in: &cancellables)
-
         orderManager
             .orders
             .map { $0.count }
@@ -124,9 +90,37 @@ final class ShopViewModel: ShopViewModelInput {
         }
     }
 
+    func products(for category: Category) -> [ShopContract.Product] {
+        return allProducts.filter { $0.categoryId == category.id }
+    }
+
+    // MARK: - Selection
+
+    private func updateSelection() {
+        var cartItems = [Cart.Item]()
+        for (productId, quantity) in selectedProducts {
+            guard let product = stockManager.product(id: productId) else {
+                continue
+            }
+            let cartItem = Cart.Item(
+                id: productId,
+                masterId: product.masterId,
+                name: product.name,
+                quantity: quantity,
+                unitPrice: product.price.amount
+            )
+            cartItems.append(cartItem)
+        }
+        Task {
+            await cartManager.updateCart(items: cartItems)
+        }
+    }
+
     private func updateProductsFromCart() {
         selectedProducts = cartManager.currentCart.items.reduce(into: [:]) { $0[$1.id] = $1.quantity }
     }
+
+    // MARK: - Observers
 
     private func addObservers() {
         do {
@@ -157,6 +151,8 @@ final class ShopViewModel: ShopViewModelInput {
         productsObserver = nil
     }
 
+    // MARK: - Handle Incoming Data
+
     private func handleShop(_ shop: Inseat.Shop?) {
         guard let shop = shop else {
             shopStatus = .unavailable
@@ -164,16 +160,16 @@ final class ShopViewModel: ShopViewModelInput {
         }
         switch shop.status {
         case .open:
-            shopStatus = .open
+            shopStatus = .browse
 
         case .order:
-            shopStatus = .open
+            shopStatus = .order
 
         case .closed:
             shopStatus = .closed
 
         @unknown default:
-            break
+            shopStatus = .unavailable
         }
     }
 
@@ -194,15 +190,10 @@ final class ShopViewModel: ShopViewModelInput {
                 image: $0.image,
                 categoryId: $0.categoryId,
                 name: $0.name,
+                description: $0.description,
                 availableQuantity: $0.availableQuantity,
                 price: $0.price
             )
-        }
-        self.products = self.allProducts.filter {
-            if let id = selectedCategory?.id {
-                return $0.categoryId == id
-            }
-            return true
         }
     }
 

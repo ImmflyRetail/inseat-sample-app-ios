@@ -4,6 +4,13 @@ struct StepperView: View {
 
     @Binding var quantity: Int
     let limit: Int?
+    let collapseWhenEmpty: Bool
+
+    init(quantity: Binding<Int>, limit: Int?, collapseWhenEmpty: Bool = true) {
+        self._quantity = quantity
+        self.limit = limit
+        self.collapseWhenEmpty = collapseWhenEmpty
+    }
 
     var isLimitReached: Bool {
         quantity == limit
@@ -11,7 +18,7 @@ struct StepperView: View {
 
     var body: some View {
         HStack(spacing: quantity > 0 ? 8 : 0) {
-            if quantity > 0 {
+            if quantity > 0 || !collapseWhenEmpty {
                 makeRemoveButton()
                     .padding(.leading, 3)
 
@@ -30,7 +37,7 @@ struct StepperView: View {
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
         .frame(height: 24)
-        .when(quantity > 0, transform: { view in
+        .when(quantity > 0 || !collapseWhenEmpty, transform: { view in
             view
                 .background(Color.complementary)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -43,7 +50,9 @@ struct StepperView: View {
         }, label: {
             Image(quantity > 1 ? "Remove" : "Trash")
                 .padding(.all, 3)
+                .opacity(quantity == 0 ? 0.4 : 1)
         })
+        .disabled(quantity == 0)
     }
 
     private func makeAddButton() -> some View {
@@ -71,6 +80,15 @@ struct StepperView: View {
         StepperView(
             quantity: .constant(0),
             limit: nil
+        )
+        .padding(.all, 8)
+
+        Divider()
+
+        StepperView(
+            quantity: .constant(0),
+            limit: nil,
+            collapseWhenEmpty: false
         )
         .padding(.all, 8)
 

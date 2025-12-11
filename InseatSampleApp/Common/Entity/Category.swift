@@ -1,4 +1,6 @@
 struct Category {
-    let id: Int
+    typealias ID = Int
+
+    let id: ID
     let name: String
 }

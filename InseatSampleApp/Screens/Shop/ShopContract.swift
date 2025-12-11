@@ -2,27 +2,31 @@ import UIKit
 
 enum ShopContract {
 
-    struct Product {
+    struct Product: Identifiable {
         typealias ID = Int
 
         let id: ID
         let image: UIImage?
         let categoryId: Int
         let name: String
+        let description: String
         let availableQuantity: Int
         let price: Price
     }
 
     enum ShopStatus {
         case unavailable
-        case open
+        case browse
+        case order
         case closed
 
         var displayName: String {
             switch self {
             case .unavailable:
                 return "Closed"
-            case .open:
+            case .browse:
+                return "Open to browse"
+            case .order:
                 return "Open"
             case .closed:
                 return "Closed"

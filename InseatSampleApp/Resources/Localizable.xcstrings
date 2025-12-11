@@ -765,6 +765,39 @@
         }
       }
     },
+    "screen.product_detail.buttons.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm"
+          }
+        }
+      }
+    },
+    "screen.product_detail.product_unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Product unavailable"
+          }
+        }
+      }
+    },
+    "screen.product_detail.shop_unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The store is not open yet! Feel free to explore the available products, but keep in mind that prices and stock may change when the store officially opens."
+          }
+        }
+      }
+    },
     "screen.promotion_builder.actions.add_to_cart" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -887,24 +920,35 @@
         }
       }
     },
+    "screen.shop.product.limit_reached" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limit reached"
+          }
+        }
+      }
+    },
+    "screen.shop.product.out_of_stock" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Out of stock"
+          }
+        }
+      }
+    },
     "screen.shop.shop_status" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Shop Status: %@"
-          }
-        }
-      }
-    },
-    "screen.shop.stock_left" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stock: %ld"
+            "value" : "Shop Status:"
           }
         }
       }
