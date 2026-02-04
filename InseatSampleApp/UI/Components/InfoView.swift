@@ -12,7 +12,7 @@ struct InfoView: View {
 
             Spacer(minLength: 0)
         }
-        .background(Color.backgroundInfo)
+        .background(Color.backgroundNegative)
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }

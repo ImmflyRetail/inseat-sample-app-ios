@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             supportedICAOs: ["{ICAO_UPPERCASED}"],
             environment: Configuration.Environment.test
         )
-
+        
         Task {
             do {
                 InseatAPI.shared.setLoggingDestinations([
@@ -41,7 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 ])
                 try await InseatAPI.shared.initialize(configuration: configuration)
                 try await InseatAPI.shared.start()
-
+                
                 InseatAPI.shared.syncProductData { result in
                     Logger.log("did sync data with result='\(result)'", level: .debug)
                 }

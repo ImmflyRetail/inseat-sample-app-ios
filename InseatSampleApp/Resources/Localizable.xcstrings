@@ -975,6 +975,17 @@
         }
       }
     },
+    "screen.shop.view-cart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View cart"
+          }
+        }
+      }
+    },
     "settings.config.automatic_refresh" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -987,5 +998,5 @@
       }
     }
   },
-  "version" : "1.0"
+  "version" : "1.1"
 }

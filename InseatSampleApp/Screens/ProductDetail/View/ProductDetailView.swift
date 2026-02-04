@@ -14,15 +14,11 @@ struct ProductDetailView<ViewModel: ProductDetailViewModelInput>: View {
         VStack(spacing: .zero) {
             HStack(spacing: .zero) {
                 Spacer()
-
-                Button(action: {
+                XmarkButton(action: {
                     dismiss()
-                }, label: {
-                    Image("Cancel")
                 })
-                .padding(.all, 16)
             }
-            .background(Color.clear)
+            .padding(16)
 
             if let product = viewModel.product {
                 makeContentView(product: product)
@@ -39,26 +35,38 @@ struct ProductDetailView<ViewModel: ProductDetailViewModelInput>: View {
         .onAppear(perform: viewModel.onAppear)
     }
 
-    private func limit(for product: ProductDetailContract.Product) ->  Int {
+    private func limit(for product: ProductDetailContract.Product) -> Int {
         viewModel.isSelectionAllowedWhenShopClosed ? 10 : product.availableQuantity
     }
 
-    private func makeContentView(product: ProductDetailContract.Product) -> some View {
-        VStack(spacing: .zero) {
-            ScrollView {
-                makeProductView(product: product)
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 16)
-            }
+    private var canConfirm: Bool {
+        viewModel.shopStatus == .order || viewModel.isSelectionAllowedWhenShopClosed
+    }
 
-            if viewModel.shopStatus == .order || viewModel.isSelectionAllowedWhenShopClosed {
-                Button("screen.product_detail.buttons.confirm".localized) {
-                    viewModel.confirm()
-                    dismiss()
-                }
-                .buttonStyle(BrandPrimaryButtonStyle())
-                .padding(.all, 16)
+    private func makeContentView(product: ProductDetailContract.Product) -> some View {
+        ScrollView {
+            makeProductView(product: product)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 16)
+                .padding(.bottom, canConfirm ? 96 : 0)
+        }
+        .safeAreaInset(edge: .bottom) {
+            if canConfirm {
+                floatingBottomSection
             }
+        }
+    }
+
+    // MARK: - Floating Bottom Button
+
+    private var floatingBottomSection: some View {
+        VStack(spacing: 0) {
+            Button("screen.product_detail.buttons.confirm".localized) {
+                viewModel.confirm()
+                dismiss()
+            }
+            .buttonStyle(BrandPrimaryButtonStyle())
+            .padding()
         }
     }
 
@@ -66,11 +74,12 @@ struct ProductDetailView<ViewModel: ProductDetailViewModelInput>: View {
         VStack(spacing: .zero) {
             Image(uiImage: product.image ?? UIImage.productPlaceholder)
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .scaledToFit()
                 .frame(height: 240)
                 .frame(maxWidth: .infinity)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .padding(.bottom, 24)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
 
             HStack(spacing: .zero) {
                 VStack(alignment: .leading, spacing: .zero) {
@@ -84,6 +93,7 @@ struct ProductDetailView<ViewModel: ProductDetailViewModelInput>: View {
                 }
                 Spacer()
             }
+            .padding(.top, 24)
 
             VStack(spacing: 24) {
                 DescriptionView(text: product.description)
@@ -94,13 +104,17 @@ struct ProductDetailView<ViewModel: ProductDetailViewModelInput>: View {
                         .frame(maxWidth: .infinity)
                 }
 
-                if viewModel.shopStatus == .order || viewModel.isSelectionAllowedWhenShopClosed {
+                if canConfirm {
                     StepperView(
                         quantity: $viewModel.quantity,
                         limit: limit(for: product),
                         collapseWhenEmpty: false
                     )
                     .frame(width: 140)
+
+                    if limit(for: product) > 0, viewModel.quantity == limit(for: product) {
+                        StockTextLabel(text: "screen.shop.product.limit_reached".localized)
+                    }
                 }
             }
             .padding(.vertical, 24)
@@ -133,3 +147,4 @@ private final class ProductDetailViewModelMock: ProductDetailViewModelInput {
 
     func confirm() { }
 }
+

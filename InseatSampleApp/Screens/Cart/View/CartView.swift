@@ -36,6 +36,11 @@ struct CartView<ViewModel: CartViewModelInput>: View {
                 )
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            if !viewModel.selectedProducts.isEmpty {
+                floatingBottomSection
+            }
+        }
     }
 
     private func makeEmptyStateView() -> some View {
@@ -48,27 +53,35 @@ struct CartView<ViewModel: CartViewModelInput>: View {
     }
 
     private func makeNonEmptyStateView() -> some View {
-        VStack(alignment: .leading, spacing: .zero) {
-            ScrollView {
-                VStack(spacing: 24) {
-                    Spacer(minLength: 0)
+        ScrollView {
+            VStack(spacing: 24) {
+                Spacer(minLength: 0)
 
-                    makeProductListGroup()
-                    Divider()
-
-                    makeTotalsGroup()
-                }
+                makeProductListGroup()
+                Divider()
+                makeTotalsGroup()
             }
             .padding(.horizontal, 16)
+            // ✅ Space so content doesn’t hide behind floating button
+            .padding(.bottom, 96)
+        }
+        .scrollIndicators(.hidden)
+    }
 
+    // MARK: - Floating bottom button
+
+    private var floatingBottomSection: some View {
+        VStack(spacing: 0) {
             Button("screen.cart.buttons.checkout".localized) {
                 router.navigate(to: .checkout)
             }
             .buttonStyle(BrandPrimaryButtonStyle())
             .disabled(!viewModel.isOrdersEnabled)
-            .padding(.all, 16)
+            .padding(16)
         }
     }
+
+    // MARK: - Sections
 
     private func makeProductListGroup() -> some View {
         FormGroupView(title: "screen.cart.summary".localized, fontSize: 22) {
@@ -77,9 +90,7 @@ struct CartView<ViewModel: CartViewModelInput>: View {
                     ProductItemView(
                         product: product,
                         quantity: Binding(
-                            get: {
-                                viewModel.selectedProducts[product.id] ?? 0
-                            },
+                            get: { viewModel.selectedProducts[product.id] ?? 0 },
                             set: { quantity in
                                 viewModel.selectedProducts[product.id] = quantity > 0 ? quantity : nil
                             }
@@ -92,7 +103,10 @@ struct CartView<ViewModel: CartViewModelInput>: View {
 
     private func makeTotalsGroup() -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            PriceKeyValueView(title: "screen.cart.summary.subtotal".localized, price: viewModel.subtotalPrice)
+            PriceKeyValueView(
+                title: "screen.cart.summary.subtotal".localized,
+                price: viewModel.subtotalPrice
+            )
 
             if let savings = viewModel.totalSaving {
                 ExpandablePriceKeyValueView(
@@ -116,22 +130,34 @@ struct CartView<ViewModel: CartViewModelInput>: View {
                     }
                 )
             }
-            PriceKeyValueView(title: "screen.cart.summary.total".localized, price: viewModel.totalPrice, style: .large)
+
+            PriceKeyValueView(
+                title: "screen.cart.summary.total".localized,
+                price: viewModel.totalPrice,
+                style: .large
+            )
         }
     }
+
+    // MARK: - Product row
 
     private struct ProductItemView: View {
 
         let product: CartContract.Product
-
         @Binding var quantity: Int
+
+        private var limit: Int { min(product.availableQuantity, 10) }
 
         var body: some View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
                     Image(uiImage: product.image ?? UIImage.productPlaceholder)
-                        .frame(width: 122, height: 106)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 120, height: 120)
+                        .background(Color.white)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
 
                     VStack(alignment: .leading) {
                         HStack(alignment: .top, spacing: 8) {
@@ -147,11 +173,17 @@ struct CartView<ViewModel: CartViewModelInput>: View {
                                 .foregroundStyle(Color.foregroundDark)
                         }
 
-                        StepperView(
-                            quantity: $quantity,
-                            limit: product.availableQuantity
-                        )
-                        .fixedSize()
+                        HStack(spacing: 4) {
+                            StepperView(
+                                quantity: $quantity,
+                                limit: limit
+                            )
+                            .fixedSize()
+
+                            if limit > 0, quantity == limit {
+                                StockTextLabel(text: "screen.shop.product.limit_reached".localized)
+                            }
+                        }
                     }
                 }
                 .padding(.vertical, 8)

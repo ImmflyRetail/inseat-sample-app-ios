@@ -40,7 +40,7 @@ struct PromotionBuilderHeaderView: View {
         }
         .padding(.all, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.backgroundGray2)
+        .background(Color.backgroundDescription)
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }

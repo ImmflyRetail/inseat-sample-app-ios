@@ -37,6 +37,7 @@ struct BrandPrimaryButtonStyle: ButtonStyle {
                 .foregroundColor(foregroundColor)
                 .background(backgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                .shadow(color: .black.opacity(0.2), radius: 2, x: 2, y: 1)
         }
     }
 

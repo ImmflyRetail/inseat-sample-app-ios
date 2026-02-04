@@ -33,13 +33,13 @@ struct ShopProductView: View {
                             }
 
                             ZStack {
-                                StepperView(
-                                    quantity: $cartQuantity,
-                                    limit: limit
-                                )
-
                                 if totalQuantity == 0 {
                                     StockTextLabel(text: "screen.shop.product.out_of_stock".localized)
+                                } else {
+                                    StepperView(
+                                        quantity: $cartQuantity,
+                                        limit: limit
+                                    )
                                 }
                             }
                             .frame(maxWidth: .infinity)
@@ -48,6 +48,7 @@ struct ShopProductView: View {
                     }
             }
             .frame(maxWidth: .infinity)
+            .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(product.name)

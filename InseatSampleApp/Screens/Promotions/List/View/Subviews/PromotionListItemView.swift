@@ -17,14 +17,15 @@ struct PromotionListItemView: View {
                     Text(promotion.name)
                         .font(Font.appFont(size: 16, weight: .semibold))
                         .foregroundStyle(Color.foregroundDark)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .lineSpacing(4)
 
                     Text(promotion.description)
                         .multilineTextAlignment(.leading)
                         .font(Font.appFont(size: 14, weight: .regular))
                         .foregroundStyle(Color.foregroundLight)
                         .lineLimit(2)
-                        .lineSpacing(6)
+                        .lineSpacing(4)
 
                     switch promotion.discountType {
                     case .percentage(let percentage):
@@ -50,12 +51,14 @@ struct PromotionListItemView: View {
                 }
 
                 if let image = promotion.image {
-                    Spacer(minLength: 8)
+                    Spacer(minLength: 0)
 
                     Image(uiImage: image)
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 122, height: 114)
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -66,12 +69,12 @@ struct PromotionListItemView: View {
             Button {
                 selectionHandler()
             } label: {
-                Image("Add")
-                    .padding(.all, 3)
-                    .background(Color.complementaryLight)
-                    .clipShape(Circle())
+                Image(systemName: "plus")
+                    .foregroundStyle(.primaryForeground)
+                    .frame(width: 32, height: 32)
+                    .circularButtonStyle()
+                    .padding(.trailing)
             }
-            .frame(width: 40, height: 40)
         }
         .frame(height: 160)
         .background(Color.backgroundLight)

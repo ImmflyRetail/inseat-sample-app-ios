@@ -49,7 +49,8 @@ struct SegmentedView: View {
         }
         .scrollIndicators(.hidden)
         .frame(height: 56)
-        .background(Color.complementaryLight)
+        .background(Color.backgroundGray)
+        .bottomShadow()
     }
 
     private struct SegmentElement: View {

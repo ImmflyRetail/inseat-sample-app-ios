@@ -122,8 +122,9 @@ struct OrdersView<ViewModel: OrdersViewModelInput>: View {
                     Button {
                         deleteAction()
                     } label: {
-                        Image(systemName: "trash")
+                        Image(systemName: "trash.fill")
                             .foregroundStyle(Color.primaryRed)
+                            .padding(4)
                     }
                 }
             }

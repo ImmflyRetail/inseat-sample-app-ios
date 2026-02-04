@@ -19,55 +19,63 @@ struct CheckoutView<ViewModel: CheckoutViewModelInput>: View {
             title: "screen.checkout.title".localized,
             leading: BackButton { router.navigateBack() }
         ) {
-            VStack(alignment: .leading, spacing: .zero) {
-                ScrollView {
-                    VStack(spacing: 24) {
-                        SectionView {
-                            VStack(spacing: .zero) {
-                                if isSummaryExpanded {
-                                    makeExpandedSummaryGroup()
-                                        .padding(.bottom, 12)
-                                } else {
-                                    makeCollapsedSummaryGroup()
-                                        .padding(.bottom, 12)
+            ScrollView {
+                VStack(spacing: 24) {
+                    SectionView {
+                        VStack(spacing: .zero) {
+                            if isSummaryExpanded {
+                                makeExpandedSummaryGroup()
+                                    .padding(.bottom, 12)
+                            } else {
+                                makeCollapsedSummaryGroup()
+                                    .padding(.bottom, 12)
 
-                                    Divider()
-                                }
-
-                                makeDropdownButton()
-                                    .padding(.top, 12)
+                                Divider()
                             }
-                        }
 
-                        SectionView {
-                            makeInputGroup()
+                            makeDropdownButton()
+                                .padding(.top, 12)
                         }
-
-                        makeInfoGroup()
                     }
-                    .padding(.top, 24)
-                    .padding(.horizontal, 16)
-                }
-                .background(Color.backgroundGray)
 
-                Button("screen.checkout.actions.order".localized, action: viewModel.makeOrder)
-                    .buttonStyle(BrandPrimaryButtonStyle())
-                    .disabled(!viewModel.isSeatNumberValid)
-                    .padding(.all, 16)
+                    SectionView {
+                        makeInputGroup()
+                    }
+
+                    makeInfoGroup()
+                }
+                .padding(.top, 24)
+                .padding(.horizontal, 16)
+                ///Space so last content is not hidden behind the floating button
+                .padding(.bottom, 96)
+            }
+            .safeAreaInset(edge: .bottom) {
+                floatingBottomSection
             }
         }
         .toolbar(.hidden)
         .onAppear(perform: viewModel.onAppear)
     }
 
+    // MARK: - Floating Bottom Button
+
+    private var floatingBottomSection: some View {
+        VStack(spacing: 0) {
+            Button("screen.checkout.actions.order".localized, action: viewModel.makeOrder)
+                .buttonStyle(BrandPrimaryButtonStyle())
+                .disabled(!viewModel.isSeatNumberValid)
+                .padding()
+        }
+    }
+
+    // MARK: - Summary
+
     private func makeExpandedSummaryGroup() -> some View {
         VStack(alignment: .leading, spacing: 24) {
             FormGroupView(title: "screen.checkout.summary".localized) {
                 VStack(alignment: .leading, spacing: 16) {
                     ForEach(viewModel.displayData.cartItems, id: \.id) { item in
-                        CartItemView(
-                            item: CartItemView.Item(item)
-                        )
+                        CartItemView(item: CartItemView.Item(item))
                     }
                 }
             }
@@ -75,7 +83,10 @@ struct CheckoutView<ViewModel: CheckoutViewModelInput>: View {
             Divider()
 
             VStack(alignment: .leading, spacing: 8) {
-                PriceKeyValueView(title: "screen.checkout.summary.subtotal".localized, price: viewModel.displayData.subtotalPrice)
+                PriceKeyValueView(
+                    title: "screen.checkout.summary.subtotal".localized,
+                    price: viewModel.displayData.subtotalPrice
+                )
 
                 if let savings = viewModel.displayData.totalSaving {
                     ExpandablePriceKeyValueView(
@@ -99,7 +110,12 @@ struct CheckoutView<ViewModel: CheckoutViewModelInput>: View {
                         }
                     )
                 }
-                PriceKeyValueView(title: "screen.checkout.summary.total".localized, price: viewModel.displayData.totalPrice, style: .large)
+
+                PriceKeyValueView(
+                    title: "screen.checkout.summary.total".localized,
+                    price: viewModel.displayData.totalPrice,
+                    style: .large
+                )
             }
         }
     }
@@ -142,6 +158,8 @@ struct CheckoutView<ViewModel: CheckoutViewModelInput>: View {
         )
     }
 
+    // MARK: - Input + Info
+
     private func makeInputGroup() -> some View {
         FormGroupView(title: "screen.checkout.input".localized) {
             TextInputView(
@@ -158,10 +176,16 @@ struct CheckoutView<ViewModel: CheckoutViewModelInput>: View {
     }
 }
 
-extension CartItemView.Item {
+// MARK: - Mapping helper
 
+extension CartItemView.Item {
     init(_ cartItem: CheckoutContract.DisplayData.Item) {
-        self.init(id: cartItem.id, name: cartItem.name, quantity: cartItem.quantity, unitPrice: cartItem.unitPrice)
+        self.init(
+            id: cartItem.id,
+            name: cartItem.name,
+            quantity: cartItem.quantity,
+            unitPrice: cartItem.unitPrice
+        )
     }
 }
 

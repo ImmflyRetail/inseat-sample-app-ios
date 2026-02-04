@@ -40,19 +40,27 @@ struct PromotionBuilderProductView: View {
             Spacer()
 
             Image(uiImage: image ?? UIImage.productPlaceholder)
-                .frame(width: 122, height: 106)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+                .background(Color.white)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay(
                     alignment: Alignment(horizontal: .trailing, vertical: .bottom)) {
-                        StepperView(
-                            quantity: $quantity,
-                            limit: quantityLimit
-                        )
-                        .padding(.all, 8)
-                    }
+                        if quantityLimit == 0 {
+                            StockTextLabel(text: "screen.shop.product.out_of_stock".localized)
+                                .padding(.trailing, 10)
+                        } else {
+                            StepperView(
+                                quantity: $quantity,
+                                limit: quantityLimit
+                            )
+                            .padding(2)
+                        }
+                    }.shadow(color: .black.opacity(0.1), radius: 2, y: 1)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: 106)
+        .frame(height: 126)
     }
 }
 

@@ -17,30 +17,29 @@ struct StepperView: View {
     }
 
     var body: some View {
-        HStack(spacing: quantity > 0 ? 8 : 0) {
+        HStack(spacing: 5) {
             if quantity > 0 || !collapseWhenEmpty {
-                makeRemoveButton()
-                    .padding(.leading, 3)
+                makeRemoveButton().padding(.leading, 3)
 
-                Spacer()
+                Spacer(minLength: 0)
 
                 Text(String(quantity))
-                    .font(Font.appFont(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.foregroundDark)
+                    .font(Font.appFont(size: 15, weight: .semibold))
+                    .foregroundStyle(.primaryForeground)
                     .frame(minWidth: 28)
+                    .monospaced()
             }
 
-            Spacer()
+            Spacer(minLength: 0)
 
-            makeAddButton()
-                .padding(.trailing, 3)
+            makeAddButton().padding(.trailing, 3)
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
         .frame(height: 24)
+        .padding(.vertical, 8)
         .when(quantity > 0 || !collapseWhenEmpty, transform: { view in
             view
-                .background(Color.complementary)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18))
         })
     }
 
@@ -48,9 +47,11 @@ struct StepperView: View {
         Button(action: {
             quantity = max(0, quantity - 1)
         }, label: {
-            Image(quantity > 1 ? "Remove" : "Trash")
-                .padding(.all, 3)
-                .opacity(quantity == 0 ? 0.4 : 1)
+            Image(systemName: quantity <= 1 ? "trash": "minus")
+                .opacity(quantity == 0 ? 0.2 : 1)
+                .foregroundStyle(.primaryForeground)
+                .frame(width: 32, height: 32)
+                .circularButtonStyle()
         })
         .disabled(quantity == 0)
     }
@@ -65,11 +66,10 @@ struct StepperView: View {
                 quantity += 1
             }
         }, label: {
-            Image("Add")
-                .padding(.all, 3)
-                .background(Color.complementary)
-                .opacity(isLimitReached ? 0.4 : 1)
-                .clipShape(Circle())
+            Image(systemName: "plus")
+                .foregroundStyle(.primaryForeground)
+                .frame(width: 32, height: 32)
+                .circularButtonStyle()
         })
         .disabled(isLimitReached)
     }

@@ -12,7 +12,7 @@ struct DescriptionView: View {
 
             Spacer(minLength: 0)
         }
-        .background(Color.backgroundGray2)
+        .background(Color.backgroundDescription)
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }

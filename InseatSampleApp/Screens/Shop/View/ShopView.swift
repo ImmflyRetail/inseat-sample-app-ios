@@ -13,36 +13,35 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
         self.viewModel = viewModel
     }
 
+    private let columns = [
+           GridItem(.flexible(), alignment: .top),
+           GridItem(.flexible(), alignment: .top)
+       ]
+    
+    private var cartItemCount: Int {
+        viewModel.selectedProducts.values.reduce(0, +)
+    }
+    
+    private var bottomOverlayHeight: CGFloat {
+        90
+    }
+
     private var shopSections: [ShopContract.Section] {
         var sections = [ShopContract.Section]()
 
         if let firstCategory = viewModel.categories.first {
-            let section = ShopContract.Section(
-                type: .products(category: firstCategory),
-                index: 0
-            )
-            sections.append(section)
-            sections.append(ShopContract.Section(type: .promotions, index: 1))
+            sections.append(.init(type: .products(category: firstCategory), index: 0))
+            sections.append(.init(type: .promotions, index: 1))
 
             viewModel.categories.dropFirst().forEach { category in
-                let section = ShopContract.Section(
-                    type: .products(category: category),
-                    index: sections.count
-                )
-                sections.append(section)
+                sections.append(.init(type: .products(category: category), index: sections.count))
             }
-
         } else {
-            sections.append(ShopContract.Section(type: .promotions, index: 0))
+            sections.append(.init(type: .promotions, index: 0))
         }
 
         return sections
     }
-
-    private let columns = [
-        GridItem(.flexible(), alignment: .top),
-        GridItem(.flexible(), alignment: .top)
-    ]
 
     var body: some View {
         NavigationBar(
@@ -51,35 +50,34 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
             trailing: makeTrailingNavigationButtons(),
             subheader: makeOrderCountHeaderView()
         ) {
-            VStack(spacing: .zero) {
-                SegmentedView(
-                    segments: shopSections.map { $0.title },
-                    selectedIndex: $selectedPage
-                )
+            ZStack(alignment: .bottom) {
+                VStack(spacing: .zero) {
+                    SegmentedView(
+                        segments: shopSections.map { $0.title },
+                        selectedIndex: $selectedPage
+                    )
 
-                TabView(selection: $selectedPage) {
-                    ForEach(shopSections) { section in
-                        Group {
-                            switch section.type {
-                            case .products(let category):
-                                makeShopListView(
-                                    products: viewModel.products(for: category)
-                                )
+                    TabView(selection: $selectedPage) {
+                        ForEach(shopSections) { section in
+                            Group {
+                                switch section.type {
+                                case .products(let category):
+                                    makeShopListView(products: viewModel.products(for: category))
 
-                            case .promotions:
-                                makePromotionsListView()
+                                case .promotions:
+                                    makePromotionsListView()
+                                }
                             }
+                            .tag(section.index)
                         }
-                        .tag(section.index)
                     }
+                    .tabViewStyle(.page(indexDisplayMode: .never))
+                    .ignoresSafeArea(.container, edges: .bottom)
                 }
-                .tabViewStyle(.page)
+                .background(Color.backgroundGray)
 
-                if viewModel.shopStatus != .order {
-                    ShopStatusView(shopStatus: viewModel.shopStatus)
-                }
+                bottomOverlay
             }
-            .background(Color.backgroundGray)
         }
         .toolbar(.hidden)
         .onAppear(perform: viewModel.onAppear)
@@ -87,7 +85,6 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
             switch destination {
             case .cart:
                 CartView(viewModel: CartViewModel())
-
             case .orders:
                 OrdersView(viewModel: OrdersViewModel())
             }
@@ -106,26 +103,20 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
         .sheet(item: $selectedProduct) { product in
             ProductDetailView(
                 viewModel: ProductDetailViewModel(
-                    product: {
-                        ProductDetailContract.Product(
-                            id: product.id,
-                            image: product.image,
-                            name: product.name,
-                            description: product.description,
-                            availableQuantity: product.availableQuantity,
-                            price: product.price
-                        )
-                    }(),
+                    product: .init(
+                        id: product.id,
+                        image: product.image,
+                        name: product.name,
+                        description: product.description,
+                        availableQuantity: product.availableQuantity,
+                        price: product.price
+                    ),
                     shopStatus: {
                         switch viewModel.shopStatus {
-                        case .unavailable:
-                            return .unavailable
-                        case .browse:
-                            return .browse
-                        case .order:
-                            return .order
-                        case .closed:
-                            return .closed
+                        case .unavailable: return .unavailable
+                        case .browse: return .browse
+                        case .order: return .order
+                        case .closed: return .closed
                         }
                     }(),
                     quantity: makeQuantityBinding(for: product)
@@ -134,13 +125,64 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
         }
     }
 
+    // MARK: - Bottom section
+
+    private var bottomSection: some View {
+        Group {
+            if viewModel.shopStatus == .order, cartItemCount > 0 {
+                floatingCartBottomSection
+            } else {
+                ShopStatusView(shopStatus: viewModel.shopStatus)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: cartItemCount)
+        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: viewModel.shopStatus)
+    }
+    
+    private var bottomOverlay: some View {
+        Group {
+            if viewModel.shopStatus == .order, cartItemCount > 0 {
+                floatingCartBottomSection.padding()
+            } else {
+                ShopStatusView(shopStatus: viewModel.shopStatus)
+            }
+        }
+        .transition(.move(edge: .bottom).combined(with: .opacity))
+        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: cartItemCount)
+        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: viewModel.shopStatus)
+    }
+
+    private var floatingCartBottomSection: some View {
+        Button {
+            withAnimation(.bouncy(extraBounce: 0)) {
+                router.navigate(to: .cart)
+            }
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "cart")
+                    .imageScale(.large)
+
+                Text("screen.shop.view-cart".localized)
+                    .font(Font.appFont(size: 16, weight: .semibold))
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(BrandPrimaryButtonStyle())
+    }
+
+    // MARK: - Trailing nav button
+
     private func makeTrailingNavigationButtons() -> some View {
         HStack(spacing: 16) {
-            Button(action: {
+            Button {
                 router.navigate(to: .cart)
-            }, label: {
-                Image("Cart")
-            })
+            } label: {
+                CartIconBadgeView(count: cartItemCount)
+                    .foregroundStyle(Color.primary)
+                    .frame(width: 28, height: 28)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: cartItemCount)
+            }
         }
     }
 
@@ -155,51 +197,51 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
 
     private func makeQuantityBinding(for product: ShopContract.Product) -> Binding<Int> {
         Binding(
-            get: {
-                viewModel.selectedProducts[product.id] ?? 0
-            },
+            get: { viewModel.selectedProducts[product.id] ?? 0 },
             set: { quantity in
                 viewModel.selectedProducts[product.id] = quantity > 0 ? quantity : nil
             }
         )
     }
 
+    // MARK: - Lists
+
     private func makeShopListView(products: [ShopContract.Product]) -> some View {
-        VStack(spacing: .zero) {
-            ScrollView {
-                Spacer(minLength: 24)
+        ScrollView {
+            Spacer(minLength: 24)
 
-                if viewModel.shopStatus == .unavailable {
-                    InfoView(text: "screen.shop.unavailable".localized)
-                }
-
-                LazyVGrid(columns: columns, spacing: 24) {
-                    ForEach(products) { product in
-                        ShopProductView(
-                            product: product,
-                            shopStatus: viewModel.shopStatus,
-                            isSelectionAllowedWhenShopClosed: viewModel.isSelectionAllowedWhenShopClosed,
-                            totalQuantity: .constant(product.availableQuantity),
-                            cartQuantity: makeQuantityBinding(for: product)
-                        )
-                        .onTapGesture {
-                            selectedProduct = product
-                        }
-                    }
-                }
-
-                Spacer(minLength: 24)
+            if viewModel.shopStatus == .unavailable {
+                InfoView(text: "screen.shop.unavailable".localized)
             }
-            .scrollIndicators(.hidden)
-            .padding(.horizontal, 16)
-            .refreshable {
-                await viewModel.refresh()
+
+            LazyVGrid(columns: columns, spacing: 24) {
+                ForEach(products) { product in
+                    ShopProductView(
+                        product: product,
+                        shopStatus: viewModel.shopStatus,
+                        isSelectionAllowedWhenShopClosed: viewModel.isSelectionAllowedWhenShopClosed,
+                        totalQuantity: .constant(product.availableQuantity),
+                        cartQuantity: makeQuantityBinding(for: product)
+                    )
+                    .onTapGesture { selectedProduct = product }
+                }
             }
+
+            Spacer(minLength: 24)
+
+            Color.clear.frame(height: bottomOverlayHeight)
         }
+        .scrollIndicators(.hidden)
+        .padding(.horizontal, 16)
+        .refreshable { await viewModel.refresh() }
     }
 
     private func makePromotionsListView() -> some View {
-        PromotionListView(viewModel: PromotionListViewModel())
+        ScrollView {
+            PromotionListView(viewModel: PromotionListViewModel())
+            Color.clear.frame(height: bottomOverlayHeight)
+        }
+        .scrollIndicators(.hidden)
     }
 }
 

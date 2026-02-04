@@ -24,19 +24,30 @@ struct PromotionBuilderView<ViewModel: PromotionBuilderViewModelInput>: View {
                     }
                     .padding(.vertical, 24)
                     .padding(.horizontal, 16)
+                    /// Space so content doesn’t hide behind floating button
+                    .padding(.bottom, 96)
                 }
-
-                Button("screen.promotion_builder.actions.add_to_cart".localized) {
-                    viewModel.addToCart()
-                }
-                .buttonStyle(BrandPrimaryButtonStyle())
-                .disabled(!viewModel.isPromotionRequirementsSatisfied)
-                .padding(.all, 16)
             }
             .background(Color.backgroundGray)
         }
         .toolbar(.hidden)
         .onAppear(perform: viewModel.onAppear)
+        .safeAreaInset(edge: .bottom) {
+            floatingBottomSection
+        }
+    }
+    
+    // MARK: - Floating bottom button
+
+    private var floatingBottomSection: some View {
+        VStack(spacing: 0) {
+            Button("screen.promotion_builder.actions.add_to_cart".localized) {
+                viewModel.addToCart()
+            }
+            .buttonStyle(BrandPrimaryButtonStyle())
+            .disabled(!viewModel.isPromotionRequirementsSatisfied)
+            .padding(16)
+        }
     }
 
     private func makeHeaderSection() -> some View {
@@ -166,6 +177,7 @@ struct PromotionBuilderView<ViewModel: PromotionBuilderViewModelInput>: View {
                         ),
                         quantity: quantity(product.masterId)
                     )
+                    .padding(.bottom, 5)
                     .disabled(!isEnabled(product.masterId))
                 }
             }
