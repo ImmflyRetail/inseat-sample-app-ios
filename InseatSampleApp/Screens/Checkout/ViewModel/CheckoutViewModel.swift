@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import Inseat
 
+@MainActor
 final class CheckoutViewModel: CheckoutViewModelInput {
 
     var displayData: CheckoutContract.DisplayData {
@@ -35,24 +36,27 @@ final class CheckoutViewModel: CheckoutViewModelInput {
     private let cartManager: CartManaging
 
     private let coordinator: NavigationCoordinator
+    
+    private let confirmationCenter: OrderConfirmationCenter
 
     private var cancellables: Set<AnyCancellable> = []
 
     init(
         cartManager: CartManaging = CartManager.shared,
-        coordinator: NavigationCoordinator
+        coordinator: NavigationCoordinator,
+        confirmationCenter: OrderConfirmationCenter? = nil
     ) {
         self.cart = cartManager.currentCart
         self.cartManager = cartManager
         self.coordinator = coordinator
-
+        self.confirmationCenter = confirmationCenter ?? OrderConfirmationCenter.shared
         bind()
     }
 
     private func bind() {
         $seatNumber
             .map { seatNumber in
-                let regex = /^([1-9]+[A-Z])$/
+                let regex = /^([1-9][0-9]?[A-Z])$/
                 return (try? regex.wholeMatch(in: seatNumber)) != nil
             }
             .removeDuplicates()
@@ -94,6 +98,7 @@ final class CheckoutViewModel: CheckoutViewModelInput {
 
                 await MainActor.run {
                     cartManager.resetCart()
+                    confirmationCenter.present()
                     coordinator.navigateToShop()
                 }
 

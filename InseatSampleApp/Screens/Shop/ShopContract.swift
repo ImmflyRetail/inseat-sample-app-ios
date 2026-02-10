@@ -2,7 +2,7 @@ import UIKit
 
 enum ShopContract {
 
-    struct Product: Identifiable {
+    struct Product: Identifiable, Equatable {
         typealias ID = Int
 
         let id: ID
@@ -22,20 +22,17 @@ enum ShopContract {
 
         var displayName: String {
             switch self {
-            case .unavailable:
-                return "Closed"
-            case .browse:
-                return "Open to browse"
-            case .order:
-                return "Open"
-            case .closed:
-                return "Closed"
+            case .unavailable: return "Closed"
+            case .browse: return "Open to browse"
+            case .order: return "Open"
+            case .closed: return "Closed"
             }
         }
     }
 
-    struct Section: Identifiable {
-        enum SectionType {
+    struct Section: Identifiable, Equatable {
+
+        enum SectionType: Equatable {
             case products(category: Category)
             case promotions
         }
@@ -47,7 +44,6 @@ enum ShopContract {
             switch type {
             case .products(let category):
                 return String(category.id)
-
             case .promotions:
                 return "promotions"
             }
@@ -57,7 +53,6 @@ enum ShopContract {
             switch type {
             case .products(let category):
                 return category.name
-
             case .promotions:
                 return "Promotions"
             }

@@ -46,7 +46,6 @@ struct CheckoutView<ViewModel: CheckoutViewModelInput>: View {
                 }
                 .padding(.top, 24)
                 .padding(.horizontal, 16)
-                ///Space so last content is not hidden behind the floating button
                 .padding(.bottom, 96)
             }
             .safeAreaInset(edge: .bottom) {
@@ -203,26 +202,25 @@ private final class CheckoutViewModelMock: CheckoutViewModelInput {
                 .init(id: 1, masterId: 11, name: "Coca-Cola", quantity: 1, unitPrice: .init(amount: 3, currency: .eur)),
                 .init(id: 2, masterId: 22, name: "Fanta", quantity: 2, unitPrice: .init(amount: 3, currency: .eur))
             ],
-            subtotalPrice: .init(amount: 6, currency: .eur),
+            subtotalPrice: .init(amount: 9, currency: .eur),
             totalSaving: nil,
             appliedPromotions: [],
-            totalPrice: .init(amount: 6, currency: .eur)
+            totalPrice: .init(amount: 9, currency: .eur)
         )
     }
 
     @Published var seatNumber: String = ""
-    @Published var isSeatNumberValid = false
+    @Published private(set) var isSeatNumberValid: Bool = false
 
+    private let confirmationCenter: OrderConfirmationCenter
     private var cancellables: Set<AnyCancellable> = []
 
-    func onAppear() { }
+    init(confirmationCenter: OrderConfirmationCenter? = nil) {
+        self.confirmationCenter = confirmationCenter ?? OrderConfirmationCenter.shared
 
-    func makeOrder() { }
-
-    init() {
         $seatNumber
             .map { seatNumber in
-                let regex = /^([1-9]+[A-Z])$/
+                let regex = /^([1-9][0-9]?[A-Z])$/
                 return (try? regex.wholeMatch(in: seatNumber)) != nil
             }
             .removeDuplicates()
@@ -230,5 +228,12 @@ private final class CheckoutViewModelMock: CheckoutViewModelInput {
                 self?.isSeatNumberValid = isValid
             }
             .store(in: &cancellables)
+    }
+
+    func onAppear() { }
+
+    func makeOrder() {
+        guard isSeatNumberValid else { return }
+        confirmationCenter.present()
     }
 }

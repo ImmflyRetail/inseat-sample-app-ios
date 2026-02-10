@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3A7D3BF02DD4C894008EB45C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3A7D3BEF2DD4C894008EB45C /* PrivacyInfo.xcprivacy */; };
-		FB5050F82E7AEBB900200998 /* Inseat in Frameworks */ = {isa = PBXBuildFile; productRef = FB5050F72E7AEBB900200998 /* Inseat */; };
+		EB60BC242F3A4F14005CC17D /* Inseat in Frameworks */ = {isa = PBXBuildFile; productRef = EB60BC232F3A4F14005CC17D /* Inseat */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB5050F82E7AEBB900200998 /* Inseat in Frameworks */,
+				EB60BC242F3A4F14005CC17D /* Inseat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,7 +141,7 @@
 			);
 			name = InseatSampleApp;
 			packageProductDependencies = (
-				FB5050F72E7AEBB900200998 /* Inseat */,
+				EB60BC232F3A4F14005CC17D /* Inseat */,
 			);
 			productName = InseatSampleApp;
 			productReference = 3AAF558A2DBB7EEE00A08ED3 /* InseatSampleApp.app */;
@@ -226,7 +226,7 @@
 			mainGroup = 3AAF55812DBB7EEE00A08ED3;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				FB5050F62E7AEBB900200998 /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */,
+				EB60BC222F3A4F14005CC17D /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3AAF558B2DBB7EEE00A08ED3 /* Products */;
@@ -310,7 +310,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InseatSampleApp/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Uses Bluetooth to connect and sync with nearby devices";
@@ -320,7 +320,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -346,7 +346,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InseatSampleApp/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Uses Bluetooth to connect and sync with nearby devices";
@@ -356,7 +356,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -608,20 +608,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		FB5050F62E7AEBB900200998 /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */ = {
+		EB60BC222F3A4F14005CC17D /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ImmflyRetail/inseat-sdk-ios-uat";
+			repositoryURL = "https://github.com/ImmflyRetail/inseat-sdk-ios-uat.git";
 			requirement = {
 				kind = exactVersion;
-				version = 0.1.23;
+				version = 1.0.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FB5050F72E7AEBB900200998 /* Inseat */ = {
+		EB60BC232F3A4F14005CC17D /* Inseat */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FB5050F62E7AEBB900200998 /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */;
+			package = EB60BC222F3A4F14005CC17D /* XCRemoteSwiftPackageReference "inseat-sdk-ios-uat" */;
 			productName = Inseat;
 		};
 /* End XCSwiftPackageProductDependency section */

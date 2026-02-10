@@ -1,4 +1,5 @@
-struct Category {
+struct Category: Identifiable, Equatable {
+
     typealias ID = Int
 
     let id: ID

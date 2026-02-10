@@ -1,5 +1,6 @@
 import Combine
 
+@MainActor
 protocol ShopViewModelInput: ObservableObject {
     var shopStatus: ShopContract.ShopStatus { get }
     var selectedProducts: [ShopContract.Product.ID: Int] { get set }

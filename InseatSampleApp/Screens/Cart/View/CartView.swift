@@ -46,7 +46,7 @@ struct CartView<ViewModel: CartViewModelInput>: View {
     private func makeEmptyStateView() -> some View {
         ZStack {
             Text("screen.cart.empty".localized)
-                .font(Font.appFont(size: 18, weight: .regular))
+                .font(Font.appFont(size: 22, weight: .semibold))
                 .foregroundStyle(Color.foregroundDark)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -62,7 +62,6 @@ struct CartView<ViewModel: CartViewModelInput>: View {
                 makeTotalsGroup()
             }
             .padding(.horizontal, 16)
-            // ✅ Space so content doesn’t hide behind floating button
             .padding(.bottom, 96)
         }
         .scrollIndicators(.hidden)
@@ -146,7 +145,7 @@ struct CartView<ViewModel: CartViewModelInput>: View {
         let product: CartContract.Product
         @Binding var quantity: Int
 
-        private var limit: Int { min(product.availableQuantity, 10) }
+        private var limit: Int { product.availableQuantity }
 
         var body: some View {
             VStack(alignment: .leading, spacing: 8) {
@@ -223,3 +222,4 @@ private final class CartViewModelMock: CartViewModelInput {
 
     init() {  }
 }
+

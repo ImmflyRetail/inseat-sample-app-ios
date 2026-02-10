@@ -4,6 +4,9 @@
     "" : {
       "shouldTranslate" : false
     },
+    "%lld" : {
+      "comment" : "A red circle with as a Badge count of items in the cart."
+    },
     "product.multiplier" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -154,6 +157,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Order now"
+          }
+        }
+      }
+    },
+    "screen.checkout.confirmation.keep_shopping" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep shopping"
+          }
+        }
+      }
+    },
+    "screen.checkout.confirmation.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sit back and relax! A crew member will bring your order to you."
+          }
+        }
+      }
+    },
+    "screen.checkout.confirmation.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your order's in!"
+          }
+        }
+      }
+    },
+    "screen.checkout.confirmation.view_order_status" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View order status"
           }
         }
       }
@@ -573,6 +620,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "View order status"
+          }
+        }
+      }
+    },
+    "screen.orders.cancel.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel order"
+          }
+        }
+      }
+    },
+    "screen.orders.cancel.keep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep order"
+          }
+        }
+      }
+    },
+    "screen.orders.cancel.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forgot something? You can always add extra items on a new order."
+          }
+        }
+      }
+    },
+    "screen.orders.cancel.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel your order?"
           }
         }
       }

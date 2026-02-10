@@ -7,23 +7,22 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
     @ObservedObject var viewModel: ViewModel
 
     @State private var selectedPage: Int? = 0
-    @State private var selectedProduct: ShopContract.Product?
-
+    
+    @State private var activeSheet: ShopSheet?
+    
+    @EnvironmentObject private var confirmationCenter: OrderConfirmationCenter
+   
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
 
     private let columns = [
-           GridItem(.flexible(), alignment: .top),
-           GridItem(.flexible(), alignment: .top)
-       ]
+        GridItem(.flexible(), alignment: .top),
+        GridItem(.flexible(), alignment: .top)
+    ]
     
     private var cartItemCount: Int {
         viewModel.selectedProducts.values.reduce(0, +)
-    }
-    
-    private var bottomOverlayHeight: CGFloat {
-        90
     }
 
     private var shopSections: [ShopContract.Section] {
@@ -81,6 +80,11 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
         }
         .toolbar(.hidden)
         .onAppear(perform: viewModel.onAppear)
+        .onChange(of: confirmationCenter.isPresented) { isPresented in
+            if isPresented {
+                activeSheet = .orderConfirmation
+            }
+        }
         .navigationDestination(for: ShopRouter.ShopDestination.self) { destination in
             switch destination {
             case .cart:
@@ -100,28 +104,56 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
                 )
             }
         }
-        .sheet(item: $selectedProduct) { product in
-            ProductDetailView(
-                viewModel: ProductDetailViewModel(
-                    product: .init(
-                        id: product.id,
-                        image: product.image,
-                        name: product.name,
-                        description: product.description,
-                        availableQuantity: product.availableQuantity,
-                        price: product.price
-                    ),
-                    shopStatus: {
-                        switch viewModel.shopStatus {
-                        case .unavailable: return .unavailable
-                        case .browse: return .browse
-                        case .order: return .order
-                        case .closed: return .closed
-                        }
-                    }(),
-                    quantity: makeQuantityBinding(for: product)
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+
+            case .product(let product):
+                ProductDetailView(
+                    viewModel: ProductDetailViewModel(
+                        product: .init(
+                            id: product.id,
+                            image: product.image,
+                            name: product.name,
+                            description: product.description,
+                            availableQuantity: product.availableQuantity,
+                            price: product.price
+                        ),
+                        shopStatus: {
+                            switch viewModel.shopStatus {
+                            case .unavailable: return .unavailable
+                            case .browse: return .browse
+                            case .order: return .order
+                            case .closed: return .closed
+                            }
+                        }(),
+                        quantity: makeQuantityBinding(for: product)
+                    )
                 )
-            )
+
+            case .orderConfirmation:
+                OrderConfirmationSheet(
+                    image: Image(systemName: "checkmark.circle.fill"),
+                    title: "screen.checkout.confirmation.title".localized,
+                    message: "screen.checkout.confirmation.message".localized,
+                    keepTitle: "screen.checkout.confirmation.keep_shopping".localized,
+                    cancelTitle: "screen.checkout.confirmation.view_order_status".localized,
+                    horizontalAlignment: .center,
+                    onKeep: {
+                        confirmationCenter.dismiss()
+                        activeSheet = nil
+                        withAnimation(.bouncy(extraBounce: 0)) {
+                            router.navigateToShop()
+                        }
+                    },
+                    onCancel: {
+                        confirmationCenter.dismiss()
+                        activeSheet = nil
+                        withAnimation(.bouncy(extraBounce: 0)) {
+                            router.navigate(to: .orders)
+                        }
+                    }
+                )
+            }
         }
     }
 
@@ -185,7 +217,7 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
             }
         }
     }
-
+    
     private func makeOrderCountHeaderView() -> ShopHeaderView? {
         if viewModel.ordersCount > 0 {
             return ShopHeaderView(ordersCount: viewModel.ordersCount) {
@@ -208,40 +240,49 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
 
     private func makeShopListView(products: [ShopContract.Product]) -> some View {
         ScrollView {
-            Spacer(minLength: 24)
-
-            if viewModel.shopStatus == .unavailable {
-                InfoView(text: "screen.shop.unavailable".localized)
-            }
-
-            LazyVGrid(columns: columns, spacing: 24) {
-                ForEach(products) { product in
-                    ShopProductView(
-                        product: product,
-                        shopStatus: viewModel.shopStatus,
-                        isSelectionAllowedWhenShopClosed: viewModel.isSelectionAllowedWhenShopClosed,
-                        totalQuantity: .constant(product.availableQuantity),
-                        cartQuantity: makeQuantityBinding(for: product)
-                    )
-                    .onTapGesture { selectedProduct = product }
+            VStack(spacing: 24) {
+                if viewModel.shopStatus == .unavailable {
+                    InfoView(text: "screen.shop.unavailable".localized)
+                }
+                
+                if products.isEmpty {
+                    LazyVStack(alignment: .leading, spacing: .zero) {
+                        Text("screen.product_detail.product_unavailable".localized)
+                            .font(Font.appFont(size: 22, weight: .semibold))
+                            .foregroundStyle(Color.foregroundDark)
+                        
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 54)
+                } else {
+                    LazyVGrid(columns: columns, spacing: 24) {
+                        ForEach(products) { product in
+                            ShopProductView(
+                                product: product,
+                                shopStatus: viewModel.shopStatus,
+                                isSelectionAllowedWhenShopClosed: viewModel.isSelectionAllowedWhenShopClosed,
+                                totalQuantity: .constant(product.availableQuantity),
+                                cartQuantity: makeQuantityBinding(for: product)
+                            )
+                            .onTapGesture {
+                                activeSheet = .product(product)
+                            }
+                        }
+                    }
+                    .padding(.bottom, 96)
                 }
             }
-
-            Spacer(minLength: 24)
-
-            Color.clear.frame(height: bottomOverlayHeight)
+            .padding(.top)
         }
         .scrollIndicators(.hidden)
-        .padding(.horizontal, 16)
-        .refreshable { await viewModel.refresh() }
+        .padding(.horizontal)
+        .refreshable {
+            await viewModel.refresh()
+        }
     }
 
     private func makePromotionsListView() -> some View {
-        ScrollView {
-            PromotionListView(viewModel: PromotionListViewModel())
-            Color.clear.frame(height: bottomOverlayHeight)
-        }
-        .scrollIndicators(.hidden)
+        PromotionListView(viewModel: PromotionListViewModel())
     }
 }
 
@@ -249,34 +290,51 @@ struct ShopView<ViewModel: ShopViewModelInput>: View {
     ShopView(viewModel: ShopViewModelMock())
 }
 
-private final class ShopViewModelMock: ShopViewModelInput {
-    var shopStatus: ShopContract.ShopStatus = .order
+private final class ShopViewModelMock: ObservableObject, ShopViewModelInput {
 
-    var products: [ShopContract.Product] = [
-        ShopContract.Product(id: 1, image: nil, categoryId: 2, name: "Pepsi", description: "", availableQuantity: 1, price: .init(amount: 3, currency: .eur)),
-        ShopContract.Product(id: 2, image: nil, categoryId: 1, name: "Sandwich", description: "", availableQuantity: 1, price: .init(amount: 3, currency: .eur)),
-        ShopContract.Product(id: 3, image: nil, categoryId: 2, name: "Sprite", description: "", availableQuantity: 0, price: .init(amount: 3, currency: .eur)),
-        ShopContract.Product(id: 4, image: nil, categoryId: 2, name: "Fanta", description: "", availableQuantity: 1, price: .init(amount: 3, currency: .eur))
-    ]
+    @Published var shopStatus: ShopContract.ShopStatus = .order
+    @Published var selectedProducts: [ShopContract.Product.ID: Int] = [4: 1]
 
-    var selectedProducts: [ShopContract.Product.ID: Int] = [4: 1]
-
-    var categories: [Category] = [
+    @Published private(set) var categories: [Category] = [
         Category(id: 1, name: "Sandwiches"),
         Category(id: 2, name: "Cold Drinks")
     ]
 
-    var ordersCount = 1
+    @Published private(set) var ordersCount: Int = 1
 
-    var isSelectionAllowedWhenShopClosed = false
+    var isSelectionAllowedWhenShopClosed: Bool { false }
+
+    var shopSections: [ShopContract.Section] {
+        var sections: [ShopContract.Section] = []
+
+        if let first = categories.first {
+            sections.append(.init(type: .products(category: first), index: 0))
+            sections.append(.init(type: .promotions, index: 1))
+
+            categories.dropFirst().forEach { category in
+                sections.append(.init(type: .products(category: category), index: sections.count))
+            }
+        } else {
+            sections.append(.init(type: .promotions, index: 0))
+        }
+
+        return sections
+    }
+
+    private let allProducts: [ShopContract.Product] = [
+        .init(id: 1, image: nil, categoryId: 2, name: "Pepsi", description: "", availableQuantity: 1, price: .init(amount: 3, currency: .eur)),
+        .init(id: 2, image: nil, categoryId: 1, name: "Sandwich", description: "", availableQuantity: 1, price: .init(amount: 3, currency: .eur)),
+        .init(id: 3, image: nil, categoryId: 2, name: "Sprite", description: "", availableQuantity: 0, price: .init(amount: 3, currency: .eur)),
+        .init(id: 4, image: nil, categoryId: 2, name: "Fanta", description: "", availableQuantity: 1, price: .init(amount: 3, currency: .eur))
+    ]
+
+    init() { }
 
     func onAppear() { }
 
     func refresh() async { }
 
     func products(for category: Category) -> [ShopContract.Product] {
-        return products
+        allProducts.filter { $0.categoryId == category.id }
     }
-
-    init() {  }
 }

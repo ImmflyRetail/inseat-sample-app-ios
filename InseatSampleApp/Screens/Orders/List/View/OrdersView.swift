@@ -24,12 +24,24 @@ struct OrdersView<ViewModel: OrdersViewModelInput>: View {
         .navigationDestination(for: ShopRouter.OrderDestination.self) { destination in
             switch destination {
             case .orderStatus(let order):
-                return OrderStatusView(
-                    viewModel: OrderStatusViewModel(
-                        order: order
-                    )
-                )
+                OrderStatusView(viewModel: OrderStatusViewModel(order: order))
             }
+        }
+        .sheet(isPresented: $viewModel.isCancelAlertPresented) {
+            OrderConfirmationSheet(
+                image: nil,
+                title: "screen.orders.cancel.title".localized,
+                message: "screen.orders.cancel.message".localized,
+                keepTitle: "screen.orders.cancel.keep".localized,
+                cancelTitle: "screen.orders.cancel.confirm".localized,
+                horizontalAlignment: .leading,
+                onKeep: {
+                    viewModel.dismissCancel()
+                },
+                onCancel: {
+                    viewModel.confirmCancel()
+                }
+            )
         }
     }
 
@@ -40,18 +52,14 @@ struct OrdersView<ViewModel: OrdersViewModelInput>: View {
                     OrderDetailsView(
                         order: order,
                         isExpanded: Binding(
-                            get: {
-                                isExpanded[order.id] ?? false
-                            },
-                            set: { newValue in
-                                isExpanded[order.id] = newValue
-                            }
+                            get: { isExpanded[order.id] ?? false },
+                            set: { isExpanded[order.id] = $0 }
                         ),
                         viewStatusAction: {
                             router.navigate(to: .orderStatus(order: order))
                         },
                         deleteAction: {
-                            viewModel.delete(orderId: order.id)
+                            viewModel.requestCancel(orderId: order.id)
                         }
                     )
                 }
@@ -119,9 +127,7 @@ struct OrdersView<ViewModel: OrdersViewModelInput>: View {
                 StatusView(order: order)
 
                 if order.status == .placed || order.status == .received {
-                    Button {
-                        deleteAction()
-                    } label: {
+                    Button(action: deleteAction) {
                         Image(systemName: "trash.fill")
                             .foregroundStyle(Color.primaryRed)
                             .padding(4)
@@ -142,7 +148,6 @@ struct OrdersView<ViewModel: OrdersViewModelInput>: View {
 
         private func makeAttributedText() -> AttributedString {
             var text1 = AttributedString("screen.orders.summary.compact".localized(order.items.count) + " ")
-
             text1.font = Font.appFont(size: 16, weight: .regular)
             text1.foregroundColor = Color.foregroundDark
 
@@ -187,9 +192,7 @@ struct OrdersView<ViewModel: OrdersViewModelInput>: View {
                 DropdownButton(
                     style: .detail(title: "screen.orders.actions.status".localized),
                     isExpanded: .constant(false),
-                    action: {
-                        viewStatusAction()
-                    }
+                    action: { viewStatusAction() }
                 )
 
             case .cancelledByCrew, .cancelledByPassenger, .cancelledByTimeout, .completed, .refunded:
@@ -200,9 +203,7 @@ struct OrdersView<ViewModel: OrdersViewModelInput>: View {
                     ),
                     isExpanded: $isExpanded,
                     action: {
-                        withAnimation(.bouncy) {
-                            isExpanded.toggle()
-                        }
+                        withAnimation(.bouncy) { isExpanded.toggle() }
                     }
                 )
             }
@@ -210,7 +211,6 @@ struct OrdersView<ViewModel: OrdersViewModelInput>: View {
     }
 
     private struct StatusView: View {
-
         let order: Order
 
         var body: some View {
@@ -286,9 +286,9 @@ extension CartItemView.Item {
     OrdersView(viewModel: OrdersViewModelMock())
 }
 
-private final class OrdersViewModelMock: OrdersViewModelInput {
+private final class OrdersViewModelMock: ObservableObject, OrdersViewModelInput {
 
-    let orders: [Order] = [
+    @Published private(set) var orders: [Order] = [
         Order(
             id: UUID().uuidString,
             seatNumber: "1A",
@@ -318,11 +318,11 @@ private final class OrdersViewModelMock: OrdersViewModelInput {
             id: UUID().uuidString,
             seatNumber: "3A",
             items: [
-                .init(id: 345, name: "Sprite", quantity: 1, unitPrice: .init(amount: 3, currency: .eur))
+                .init(id: 456, name: "Water", quantity: 1, unitPrice: .init(amount: 2, currency: .eur))
             ],
-            subtotalPrice: .init(amount: 3, currency: .eur),
+            subtotalPrice: .init(amount: 2, currency: .eur),
             totalSavings: nil,
-            totalPrice: .init(amount: 3, currency: .eur),
+            totalPrice: .init(amount: 2, currency: .eur),
             status: .completed,
             createdAt: Date()
         ),
@@ -330,19 +330,50 @@ private final class OrdersViewModelMock: OrdersViewModelInput {
             id: UUID().uuidString,
             seatNumber: "4A",
             items: [
-                .init(id: 345, name: "Sprite", quantity: 1, unitPrice: .init(amount: 3, currency: .eur))
+                .init(id: 567, name: "Coffee", quantity: 1, unitPrice: .init(amount: 4, currency: .eur))
             ],
-            subtotalPrice: .init(amount: 3, currency: .eur),
+            subtotalPrice: .init(amount: 4, currency: .eur),
             totalSavings: nil,
-            totalPrice: .init(amount: 3, currency: .eur),
+            totalPrice: .init(amount: 4, currency: .eur),
             status: .cancelledByPassenger,
             createdAt: Date()
         )
     ]
 
-    func onAppear() { }
+    @Published var isCancelAlertPresented: Bool = false
 
-    func delete(orderId: Order.ID) { }
+    // MARK: - Internal state for alert
 
-    init() {  }
+    private var pendingCancelOrderId: Order.ID?
+
+    var cancelCandidateOrderId: Order.ID? {
+        pendingCancelOrderId
+    }
+
+    // MARK: - Lifecycle
+
+    init() {}
+
+    func onAppear() {}
+
+    // MARK: - Cancel flow
+
+    func requestCancel(orderId: Order.ID) {
+        pendingCancelOrderId = orderId
+        isCancelAlertPresented = true
+    }
+
+    func dismissCancel() {
+        isCancelAlertPresented = false
+        pendingCancelOrderId = nil
+    }
+
+    func confirmCancel() {
+        guard let id = pendingCancelOrderId else {
+            dismissCancel()
+            return
+        }
+        orders.removeAll { $0.id == id }
+        dismissCancel()
+    }
 }

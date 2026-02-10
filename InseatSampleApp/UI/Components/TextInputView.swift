@@ -37,25 +37,3 @@ struct TextInputView: View {
         }
     }
 }
-
-// MARK: - Preview
-
-#Preview {
-    SectionView {
-        TextInputView(
-            label: "What's your seat number?",
-            placeholder: "i.e. 1A",
-            value: .constant("1A"),
-            isValid: true
-        )
-    }
-
-    SectionView {
-        TextInputView(
-            label: "What's your seat number?",
-            placeholder: "i.e. 1A",
-            value: .constant(""),
-            isValid: false
-        )
-    }
-}

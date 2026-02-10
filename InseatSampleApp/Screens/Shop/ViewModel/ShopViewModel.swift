@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import Inseat
 
+@MainActor
 final class ShopViewModel: ShopViewModelInput {
 
     @Published var shopStatus: ShopContract.ShopStatus = .closed
@@ -124,23 +125,38 @@ final class ShopViewModel: ShopViewModelInput {
 
     private func addObservers() {
         do {
-            guard productsObserver == nil else {
-                return
-            }
+            guard productsObserver == nil else { return }
+            
             orderManager.observeOrders()
+            
             shopObserver = try InseatAPI.shared.observeShop { [weak self] shop in
-                self?.handleShop(shop)
-            }
-            productsObserver = try InseatAPI.shared.observeProducts { [weak self] products in
-                self?.handleProducts(products)
-            }
-            Task {
-                let categories = try await InseatAPI.shared.fetchCategories()
-                await MainActor.run {
-                    self.handleCategories(categories)
+                guard let self, let shop else { return }
+
+                Task { @MainActor in
+                    self.handleShop(shop)
                 }
             }
 
+            productsObserver = try InseatAPI.shared.observeProducts { [weak self] products in
+                guard let self else { return }
+                Task { @MainActor in
+                    self.handleProducts(products)
+                }
+            }
+            
+            Task { [weak self] in
+                guard let self else { return }
+                do {
+                    let categories = try await InseatAPI.shared.fetchCategories()
+                    
+                    await MainActor.run {
+                        self.handleCategories(categories)
+                    }
+                } catch {
+                    Logger.log("Error while fetching categories: \(error)", level: .error)
+                }
+            }
+            
         } catch {
             Logger.log("Error while registering observers: '\(error)'", level: .error)
         }

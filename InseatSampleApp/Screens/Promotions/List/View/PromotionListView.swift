@@ -31,6 +31,7 @@ struct PromotionListView<ViewModel: PromotionListViewModelInput>: View {
                     .padding(.horizontal, 16)
                 }
             }
+            .padding(.bottom, 96)
         }
         .refreshable {
             await viewModel.fetchPromotions()

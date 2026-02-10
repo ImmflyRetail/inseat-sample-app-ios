@@ -24,7 +24,6 @@ struct PromotionBuilderView<ViewModel: PromotionBuilderViewModelInput>: View {
                     }
                     .padding(.vertical, 24)
                     .padding(.horizontal, 16)
-                    /// Space so content doesn’t hide behind floating button
                     .padding(.bottom, 96)
                 }
             }

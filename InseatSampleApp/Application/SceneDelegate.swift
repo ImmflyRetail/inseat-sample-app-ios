@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = UIHostingController(
             rootView: MenuView(viewModel: MenuViewModel())
                 .environmentObject(ShopRouter())
+                .environmentObject(OrderConfirmationCenter.shared)
         )
         self.window = window
 
